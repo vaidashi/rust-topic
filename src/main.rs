@@ -41,7 +41,7 @@ async fn main() -> io::Result<()> {
             }))
             .configure(general_routes)
             .configure(tutor_routes)
-            // .configure(topic_routes)
+            .configure(topic_routes)
     };
 
     let host_port =

@@ -116,18 +116,6 @@ pub async fn update_tutor_details_db(
     Ok(updated_tutor_row)
 }
 
-// pub async fn delete_tutor_db(pool: &PgPool, tutor_id: i32) -> Result<String, AppErrorType> {
-//     let tutor_row = sqlx::query!(
-//         "DELETE FROM tutor where id = $1",
-//         tutor_id
-//     )
-//     .execute(pool)
-//     .await
-//     .map_err(|_err| AppErrorType::DbError("Unable to delete tutor ".into()))?;
-
-//     Ok(format!("Deleted {} rows, record {:#?}", tutor_row.rows_affected(), tutor_row))
-// }
-
 pub async fn delete_tutor_db(pool: &PgPool, tutor_id: i32) -> Result<String, AppErrorType> {
     // New query to delete related data from another table
     let related_topics_data_rows = sqlx::query!(

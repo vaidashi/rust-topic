@@ -58,6 +58,10 @@ INSERT INTO topic
     (id, tutor_id, title, format, created_at, updated_at)
 VALUES(3, 3, 'Concurrency', 'video', '2021-04-22 05:45:00', '2023-03-12 05:45:00');
 
+INSERT INTO topic
+    (id, tutor_id, title, format, created_at, updated_at)
+VALUES(4, 3, 'Strings', 'video', '2022-09-22 05:45:00', '2023-10-12 05:45:00');
+
 
 SELECT setval('tutor_id_seq', (SELECT MAX(id) FROM tutor) + 1);
 SELECT setval('topic_id_seq', (SELECT MAX(id) FROM topic) + 1);
