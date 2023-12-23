@@ -14,6 +14,12 @@ pub fn tutor_routes(cfg: &mut web::ServiceConfig) {
             .route("/{tutor_id}", web::put().to(update_tutor_details))
             .route("/{tutor_id}", web::delete().to(delete_tutor))
             .route("/{tutor_id}/topics", web::get().to(get_topics_for_tutor))
+            .route(
+                "/{tutor_id}/{topic_id}",
+                web::put().to(update_topic_details),
+            )
+            .route("/{tutor_id}/{topic_id}", web::delete().to(delete_topic)),
+
     );
 }
 
@@ -23,10 +29,5 @@ pub fn topic_routes(cfg: &mut web::ServiceConfig) {
             .route("/", web::post().to(post_new_topic))
             .route("/", web::get().to(get_all_topics))
             .route("/{topic_id}", web::get().to(get_topic_details))
-            // .route(
-            //     "/{tutor_id}/{course_id}",
-            //     web::put().to(update_course),
-            // )
-            // .route("/{tutor_id}/{course_id}", web::delete().to(delete_course)),
     );
 }
