@@ -1,4 +1,4 @@
-use crate::handlers::{topic::*, general::*, tutor::*};
+use crate::handlers::{general::*, topic::*, tutor::*};
 use actix_web::web;
 
 pub fn general_routes(cfg: &mut web::ServiceConfig) {
@@ -19,7 +19,6 @@ pub fn tutor_routes(cfg: &mut web::ServiceConfig) {
                 web::put().to(update_topic_details),
             )
             .route("/{tutor_id}/{topic_id}", web::delete().to(delete_topic)),
-
     );
 }
 
@@ -28,6 +27,6 @@ pub fn topic_routes(cfg: &mut web::ServiceConfig) {
         web::scope("/topics")
             .route("/", web::post().to(post_new_topic))
             .route("/", web::get().to(get_all_topics))
-            .route("/{topic_id}", web::get().to(get_topic_details))
+            .route("/{topic_id}", web::get().to(get_topic_details)),
     );
 }

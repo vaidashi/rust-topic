@@ -1,0 +1,1 @@
+This was just a simple project to explore using Rust. Experimented with a basic CRUD application and database interaction with SQLX. 

@@ -31,7 +31,7 @@ impl From<web::Json<CreateTutor>> for CreateTutor {
             email: ct.email.clone(),
         }
     }
-}   
+}
 
 impl From<web::Json<UpdateTutor>> for UpdateTutor {
     fn from(ut: web::Json<UpdateTutor>) -> Self {

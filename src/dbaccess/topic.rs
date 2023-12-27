@@ -1,16 +1,13 @@
 use crate::errors::AppErrorType;
-use crate::models::topic::{Topic, CreateTopic, UpdateTopic};
+use crate::models::topic::{CreateTopic, Topic, UpdateTopic};
 use actix_web::App;
+use chrono::{format, NaiveDateTime, Utc};
 use sqlx::postgres::PgPool;
-use chrono::{Utc, NaiveDateTime, format};
 
 use super::tutor;
 
 pub async fn get_all_topics_db(pool: &PgPool) -> Result<Vec<Topic>, AppErrorType> {
-    let topic_rows =
-        sqlx::query!("SELECT * FROM topic")
-            .fetch_all(pool)
-            .await?;
+    let topic_rows = sqlx::query!("SELECT * FROM topic").fetch_all(pool).await?;
 
     let topics: Vec<Topic> = topic_rows
         .iter()
@@ -48,44 +45,19 @@ pub async fn get_topics_for_tutor_db(
     Ok(topic_rows)
 }
 
-pub async fn get_topic_details_db(
-    pool: &PgPool,
-    topic_id: i32,
-) -> Result<Topic, AppErrorType> {
-    let topic_row = sqlx::query_as!(
-        Topic,
-        "SELECT * FROM topic where id = $1",
-        topic_id
-    )
-    .fetch_optional(pool)
-    .await?;
+pub async fn get_topic_details_db(pool: &PgPool, topic_id: i32) -> Result<Topic, AppErrorType> {
+    let topic_row = sqlx::query_as!(Topic, "SELECT * FROM topic where id = $1", topic_id)
+        .fetch_optional(pool)
+        .await?;
 
     if let Some(topic) = topic_row {
         Ok(topic)
     } else {
         Err(AppErrorType::NotFoundError(
-            // "No topic found".to_string(),
-            format!("No topic found for topic_id: {}", topic_id)
+            format!("No topic found for topic_id: {}", topic_id),
         ))
     }
 }
-
-// pub async fn post_new_topic_db(
-//     pool: &PgPool,
-//     new_topic: CreateTopic,
-// ) -> Result<Topic, AppErrorType> {
-//     let topic_row = sqlx::query_as!(
-//         Topic,
-//         "INSERT INTO topic (
-//             tutor_id, title, topic_description, format, duration, topic_level)
-//             values ($1,$2,$3,$4,$5,$6) 
-//             returning tutor_id, id, title, topic_description, duration, topic_level, format", 
-//     new_topic.tutor_id, new_topic.title, new_topic.topic_description, new_topic.format, new_topic.duration, new_topic.topic_level)
-//     .fetch_one(pool)
-//     .await?;
-
-//     Ok(topic_row)
-// }
 
 pub async fn post_new_topic_db(
     pool: &PgPool,
@@ -110,7 +82,7 @@ pub async fn update_topic_details_db(
     pool: &PgPool,
     tutor_id: i32,
     topic_id: i32,
-    update_topic: UpdateTopic
+    update_topic: UpdateTopic,
 ) -> Result<Topic, AppErrorType> {
     let topic_row = sqlx::query_as!(
         Topic,
@@ -122,7 +94,7 @@ pub async fn update_topic_details_db(
     .await
     .map_err(|_err| AppErrorType::NotFoundError("Topic id not found".into()))?;
 
-    let update_time = Utc::now().naive_utc(); 
+    let update_time = Utc::now().naive_utc();
 
     let title: String = if let Some(title) = update_topic.title {
         title
@@ -130,7 +102,8 @@ pub async fn update_topic_details_db(
         topic_row.title
     };
 
-    let topic_description: String = if let Some(topic_description) = update_topic.topic_description {
+    let topic_description: String = if let Some(topic_description) = update_topic.topic_description
+    {
         topic_description
     } else {
         topic_row.topic_description.unwrap_or_default()
@@ -170,13 +143,13 @@ pub async fn update_topic_details_db(
 }
 
 pub async fn delete_topic_db(
-    pool: &PgPool, 
+    pool: &PgPool,
     tutor_id: i32,
-    topic_id: i32
+    topic_id: i32,
 ) -> Result<String, AppErrorType> {
     let topic_row = sqlx::query!(
-        "DELETE FROM topic where id = $1 and tutor_id = $2 returning id", 
-        topic_id, 
+        "DELETE FROM topic where id = $1 and tutor_id = $2 returning id",
+        topic_id,
         tutor_id
     )
     .fetch_one(pool)

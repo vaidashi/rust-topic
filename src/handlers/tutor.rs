@@ -172,7 +172,7 @@ mod tests {
 
         assert_eq!(resp.is_err(), true);
     }
-    
+
     #[ignore]
     #[actix_rt::test]
     async fn delete_tutor_failure() {

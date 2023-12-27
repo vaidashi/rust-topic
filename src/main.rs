@@ -3,7 +3,6 @@ use dotenv::dotenv;
 use sqlx::postgres::PgPool;
 use std::env;
 use std::io;
-use std::sync::Mutex;
 
 #[path = "./dbaccess/mod.rs"]
 mod dbaccess;
@@ -48,9 +47,5 @@ async fn main() -> io::Result<()> {
         env::var("SERVER_HOST_PORT").expect("SERVER_HOSTNAME_PORT is not set in .env file");
 
     //Start HTTP server
-    HttpServer::new(app)
-        .bind(host_port)
-        .unwrap()
-        .run()
-        .await
+    HttpServer::new(app).bind(host_port).unwrap().run().await
 }

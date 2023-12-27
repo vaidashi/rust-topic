@@ -1,4 +1,3 @@
-use crate::errors::AppErrorType;
 use crate::state::AppState;
 use actix_web::{web, HttpResponse};
 

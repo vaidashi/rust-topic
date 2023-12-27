@@ -4,8 +4,6 @@ use crate::models::topic::{CreateTopic, UpdateTopic};
 use crate::state::AppState;
 use actix_web::{web, HttpResponse};
 
-use super::tutor;
-
 pub async fn get_all_topics(app_state: web::Data<AppState>) -> Result<HttpResponse, AppErrorType> {
     get_all_topics_db(&app_state.db)
         .await
@@ -29,12 +27,12 @@ pub async fn get_topic_details(
     params: web::Path<(i32,)>,
 ) -> Result<HttpResponse, AppErrorType> {
     let (topic_id) = params.0;
-    get_topic_details_db(&app_state.db,  topic_id)
+    get_topic_details_db(&app_state.db, topic_id)
         .await
         .map(|topic| HttpResponse::Ok().json(topic))
 }
 
-pub async fn post_new_topic (
+pub async fn post_new_topic(
     new_topic: web::Json<CreateTopic>,
     app_state: web::Data<AppState>,
 ) -> Result<HttpResponse, AppErrorType> {
@@ -48,7 +46,7 @@ pub async fn update_topic_details(
     params: web::Path<(i32, i32)>,
     topic: web::Json<UpdateTopic>,
 ) -> Result<HttpResponse, AppErrorType> {
-    let (tutor_id, topic_id ) = (params.0, params.1);
+    let (tutor_id, topic_id) = (params.0, params.1);
     update_topic_details_db(&app_state.db, tutor_id, topic_id, topic.into_inner())
         .await
         .map(|topic| HttpResponse::Ok().json(topic))
@@ -58,7 +56,7 @@ pub async fn delete_topic(
     app_state: web::Data<AppState>,
     params: web::Path<(i32, i32)>,
 ) -> Result<HttpResponse, AppErrorType> {
-    let (tutor_id, topic_id ) = (params.0, params.1);
+    let (tutor_id, topic_id) = (params.0, params.1);
     delete_topic_db(&app_state.db, tutor_id, topic_id)
         .await
         .map(|res| HttpResponse::Ok().json(res))
@@ -99,8 +97,8 @@ mod tests {
             health_check_response: "".to_string(),
             db: pool,
         });
-        let params: web::Path<(i32,)> = web::Path::from((1, ));
-        
+        let params: web::Path<(i32,)> = web::Path::from((1,));
+
         let resp = get_topic_details(app_state, params).await.unwrap();
 
         assert_eq!(resp.status(), StatusCode::OK);
@@ -125,7 +123,7 @@ mod tests {
             duration: None,
         };
         let topic_param = web::Json(new_topic_payload);
-        
+
         let resp = post_new_topic(topic_param, app_state).await.unwrap();
 
         assert_eq!(resp.status(), StatusCode::OK);
@@ -149,7 +147,7 @@ mod tests {
         };
         let topic_param = web::Json(update_topic_payload);
         let params: web::Path<(i32, i32)> = web::Path::from((1, 1));
-        
+
         let resp = update_topic_details(app_state, params, topic_param)
             .await
             .unwrap();
@@ -169,7 +167,7 @@ mod tests {
         });
 
         let params: web::Path<(i32, i32)> = web::Path::from((1, 1));
-        
+
         let resp = delete_topic(app_state, params).await.unwrap();
 
         assert_eq!(resp.status(), StatusCode::OK);
@@ -185,7 +183,7 @@ mod tests {
             db: pool,
         });
         let params: web::Path<(i32,)> = web::Path::from((1000,));
-        
+
         let resp = get_topic_details(app_state, params).await;
 
         assert_eq!(resp.is_err(), true);
@@ -202,7 +200,7 @@ mod tests {
         });
 
         let params: web::Path<(i32, i32)> = web::Path::from((1, 100));
-        
+
         let resp = delete_topic(app_state, params).await;
 
         assert_eq!(resp.is_err(), true);

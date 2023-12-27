@@ -1,2 +1,2 @@
-pub mod tutor;
 pub mod topic;
+pub mod tutor;

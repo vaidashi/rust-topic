@@ -1,9 +1,6 @@
 DROP TABLE IF EXISTS tutor;
 DROP TABLE IF EXISTS topic;
 
--- DROP USER IF EXISTS testuser;
--- CREATE USER testuser WITH PASSWORD 'testpwd';
-
 CREATE TABLE tutor (
     id serial primary key,
     first_name varchar(200) not null,
